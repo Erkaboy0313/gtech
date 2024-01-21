@@ -1,8 +1,8 @@
-from rest_framework.routers import DefaultRouter
+from rest_framework.routers import DefaultRouter,SimpleRouter
 from .views import ClientView,PhotoView,ProductView,CatalogView,\
     CategoryView,SubCategoryView,AboutUsView,LoginView,ResetPassword,HomeView
 from django.urls import path,include
-router = DefaultRouter()
+router = SimpleRouter()
 
 
 router.register(r'home',HomeView,basename='home')
