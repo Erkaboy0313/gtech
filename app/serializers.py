@@ -75,12 +75,13 @@ class CatalogSerializer(TranslatableModelSerializer):
         return super().create(validated_data)
     
     def update(self, instance, validated_data):
-        image_data = validated_data.pop('photo')
-        format, datastr = image_data.split(';base64,')
-        ext = format.split('/')[-1]
-        image_decoded = base64.b64decode(datastr)
-        instance.image = ContentFile(image_decoded, name=f'image.{ext}')
-        instance.save()
+        image_data = validated_data.pop('photo',"")
+        if image_data:
+            format, datastr = image_data.split(';base64,')
+            ext = format.split('/')[-1]
+            image_decoded = base64.b64decode(datastr)
+            instance.image = ContentFile(image_decoded, name=f'image.{ext}')
+            instance.save()
         return super().update(instance, validated_data)
         
 class CategorySerializer(TranslatableModelSerializer):
@@ -113,12 +114,13 @@ class AboutUsSerializer(TranslatableModelSerializer):
         return super().create(validated_data)
     
     def update(self, instance, validated_data):
-        image_data = validated_data.pop('photo')
-        format, datastr = image_data.split(';base64,')
-        ext = format.split('/')[-1]
-        image_decoded = base64.b64decode(datastr)
-        instance.image = ContentFile(image_decoded, name=f'image.{ext}')
-        instance.save()
+        image_data = validated_data.pop('photo',"")
+        if image_data:
+            format, datastr = image_data.split(';base64,')
+            ext = format.split('/')[-1]
+            image_decoded = base64.b64decode(datastr)
+            instance.image = ContentFile(image_decoded, name=f'image.{ext}')
+            instance.save()
         return super().update(instance, validated_data)
         
 class HomeSeriaizer(serializers.Serializer):
