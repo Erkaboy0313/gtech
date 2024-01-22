@@ -4,7 +4,7 @@ from .views import ClientView,PhotoView,ProductView,CatalogView,\
 from django.urls import path,include
 router = SimpleRouter()
 
-
+# sudo certbot --nginx -d gtech.uz -d www.gtech.uz
 router.register(r'home',HomeView,basename='home')
 router.register(r'client',ClientView,basename='client')
 router.register(r'photo',PhotoView,basename='photo')

@@ -30,7 +30,7 @@ class Catalog(TranslatableModel):
         name = models.CharField(max_length = 100, blank=True, null=True),
         description = models.TextField()
     )
-    image = models.TextField()
+    image = models.FileField(upload_to='Catalog/',null=True,blank=True)
 
 class Category(TranslatableModel):
     translations = TranslatedFields(
@@ -48,8 +48,7 @@ class AboutUs(TranslatableModel):
         name = models.CharField(max_length = 100, blank=True, null=True),
         description = models.TextField()
     )
-    image = models.TextField()
-
+    image = models.FileField(upload_to='AboutUs/',null=True,blank=True)
     class Meta:
         verbose_name_plural = 'About Us'
 
@@ -62,7 +61,7 @@ class Photos(models.Model):
         MAIN = 'main'
     
     image_type = models.CharField(max_length = 8,choices = Photo_type.choices, default = Photo_type.PRODUCT)
-    image = models.TextField()
+    image = models.FileField(upload_to='Product/',null=True,blank=True)
     
     class Meta:
         verbose_name_plural = 'Photos'

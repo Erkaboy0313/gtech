@@ -51,12 +51,12 @@ class PhotoView(ModelViewSet):
     serializer_class = PhotoSerializer
     http_method_names = ('get','post','delete')
     
-    def get_permissions(self):
-        if self.action == 'create' or self.action == 'destroy':
-            permission_classes = [IsAdminUser]
-        else:
-            permission_classes = [AllowAny]
-        return [permission() for permission in permission_classes]
+    # def get_permissions(self):
+    #     if self.action == 'create' or self.action == 'destroy':
+    #         permission_classes = [IsAdminUser]
+    #     else:
+    #         permission_classes = [AllowAny]
+    #     return [permission() for permission in permission_classes]
     
     def list(self, request, *args, **kwargs):
         return Response('Not implemented',HTTP_200_OK)
@@ -97,12 +97,12 @@ class ProductView(ModelViewSet):
         else:
             return queryset
 
-    def get_permissions(self):
-        if self.action == 'list' or self.action =='retrieve':
-            permission_classes = [AllowAny]
-        else:
-            permission_classes = [IsAdminUser]
-        return [permission() for permission in permission_classes]
+    # def get_permissions(self):
+    #     if self.action == 'list' or self.action =='retrieve':
+    #         permission_classes = [AllowAny]
+    #     else:
+    #         permission_classes = [IsAdminUser]
+    #     return [permission() for permission in permission_classes]
 
     @action(['post'],detail=True)
     def add_photo(self,request,*args,**kwargs):
@@ -119,12 +119,12 @@ class CatalogView(ModelViewSet):
     serializer_class = CatalogSerializer
     http_method_names = ['get','post','patch','delete']
     
-    def get_permissions(self):
-        if self.action == 'list':
-            permission_classes = [AllowAny]
-        else:
-            permission_classes = [IsAdminUser]
-        return [permission() for permission in permission_classes]
+    # def get_permissions(self):
+    #     if self.action == 'list':
+    #         permission_classes = [AllowAny]
+    #     else:
+    #         permission_classes = [IsAdminUser]
+    #     return [permission() for permission in permission_classes]
     
 class CategoryView(ModelViewSet):
     queryset = Category.objects.all()
