@@ -9,6 +9,9 @@ from rest_framework.status import HTTP_200_OK,HTTP_400_BAD_REQUEST
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.filters import SearchFilter
+import base64
+from django.core.files.base import ContentFile
+
 
 class HomeView(ViewSet):
     
@@ -51,12 +54,12 @@ class PhotoView(ModelViewSet):
     serializer_class = PhotoSerializer
     http_method_names = ('get','post','delete')
     
-    # def get_permissions(self):
-    #     if self.action == 'create' or self.action == 'destroy':
-    #         permission_classes = [IsAdminUser]
-    #     else:
-    #         permission_classes = [AllowAny]
-    #     return [permission() for permission in permission_classes]
+    def get_permissions(self):
+        if self.action == 'create' or self.action == 'destroy':
+            permission_classes = [IsAdminUser]
+        else:
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
     
     def list(self, request, *args, **kwargs):
         return Response('Not implemented',HTTP_200_OK)
@@ -97,18 +100,27 @@ class ProductView(ModelViewSet):
         else:
             return queryset
 
-    # def get_permissions(self):
-    #     if self.action == 'list' or self.action =='retrieve':
-    #         permission_classes = [AllowAny]
-    #     else:
-    #         permission_classes = [IsAdminUser]
-    #     return [permission() for permission in permission_classes]
+    def get_permissions(self):
+        if self.action == 'list' or self.action =='retrieve':
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]
 
     @action(['post'],detail=True)
     def add_photo(self,request,*args,**kwargs):
+        
+        def to_file(base_image_data):
+            
+            format, datastr = base_image_data.split(';base64,')
+            ext = format.split('/')[-1]
+            image_decoded = base64.b64decode(datastr)
+            return ContentFile(image_decoded, name=f'image.{ext}')
+        
         product = self.get_object()
         photos = request.data.get('photos',[])
-        photo_ojects = [Photos(**data) for data in photos]
+        photo_ojects = [Photos(image = to_file(data)) for data in photos]
+        
         if photo_ojects:
             created_photos = Photos.objects.bulk_create(photo_ojects)
             product.images.add(*created_photos)
@@ -119,12 +131,12 @@ class CatalogView(ModelViewSet):
     serializer_class = CatalogSerializer
     http_method_names = ['get','post','patch','delete']
     
-    # def get_permissions(self):
-    #     if self.action == 'list':
-    #         permission_classes = [AllowAny]
-    #     else:
-    #         permission_classes = [IsAdminUser]
-    #     return [permission() for permission in permission_classes]
+    def get_permissions(self):
+        if self.action == 'list':
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]
     
 class CategoryView(ModelViewSet):
     queryset = Category.objects.all()

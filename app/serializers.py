@@ -73,6 +73,15 @@ class CatalogSerializer(TranslatableModelSerializer):
         image_decoded = base64.b64decode(datastr)
         validated_data['image'] = ContentFile(image_decoded, name=f'image.{ext}')
         return super().create(validated_data)
+    
+    def update(self, instance, validated_data):
+        image_data = validated_data.pop('photo')
+        format, datastr = image_data.split(';base64,')
+        ext = format.split('/')[-1]
+        image_decoded = base64.b64decode(datastr)
+        instance.image = ContentFile(image_decoded, name=f'image.{ext}')
+        instance.save()
+        return super().update(instance, validated_data)
         
 class CategorySerializer(TranslatableModelSerializer):
     translations = TranslatedFieldsField(shared_model = Category)
@@ -102,6 +111,15 @@ class AboutUsSerializer(TranslatableModelSerializer):
         image_decoded = base64.b64decode(datastr)
         validated_data['image'] = ContentFile(image_decoded, name=f'image.{ext}')
         return super().create(validated_data)
+    
+    def update(self, instance, validated_data):
+        image_data = validated_data.pop('photo')
+        format, datastr = image_data.split(';base64,')
+        ext = format.split('/')[-1]
+        image_decoded = base64.b64decode(datastr)
+        instance.image = ContentFile(image_decoded, name=f'image.{ext}')
+        instance.save()
+        return super().update(instance, validated_data)
         
 class HomeSeriaizer(serializers.Serializer):
     client = serializers.IntegerField()
