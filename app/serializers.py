@@ -96,7 +96,7 @@ class AboutUsSerializer(TranslatableModelSerializer):
         fields = "__all__" 
         
     def create(self, validated_data):
-        image_data = validated_data.pop('image')
+        image_data = validated_data.pop('photo')
         format, datastr = image_data.split(';base64,')
         ext = format.split('/')[-1]
         image_decoded = base64.b64decode(datastr)
