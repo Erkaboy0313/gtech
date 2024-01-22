@@ -28,6 +28,4 @@ class CategoryAdmin(TranslatableAdmin):
 class SubCategoryAdmin(TranslatableAdmin):
     list_display = ('name',)
     
-@admin.register(Photos)
-class PhotosAdmin(TranslatableAdmin):
-    list_display = ('image_type',)
+admin.site.register(Photos)
