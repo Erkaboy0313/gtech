@@ -90,15 +90,18 @@ class ProductView(ModelViewSet):
     search_fields = ['translations__name']
     
     def get_queryset(self):
-        queryset = super().get_queryset()
         main = self.request.query_params.get('main',None)
         category = self.request.query_params.get('category',None)
+        main_category = self.request.query_params.get('main-category',None)
+        print(main_category)
         if main and main == 'true':
-            return queryset.filter(main = True)
+            return Product.objects.filter(main = True)
         elif category:
-            return queryset.filter(subcategory__id = int(category))
+            return Product.objects.filter(subcategory__id = int(category))
+        elif main_category:
+            return Product.objects.filter(subcategory__category__id = int(main_category)).order_by('-main')
         else:
-            return queryset
+            return Product.objects.all()
 
     def get_permissions(self):
         if self.action == 'list' or self.action =='retrieve':
